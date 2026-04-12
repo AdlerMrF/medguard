@@ -2,7 +2,7 @@
 
 
 
-![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)
+
 [![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml)
 
 
