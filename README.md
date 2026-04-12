@@ -59,7 +59,7 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 ## Estrutura do Projeto:
 medguard/
 ├── manage.py
-├── db.sqlite3              # ⚙️ gerado após migrations ❌ não versionar
+├── db.sqlite3              # gerado após migrations (não versionar)
 ├── requirements.txt
 ├── pyproject.toml
 ├── README.md
@@ -68,29 +68,29 @@ medguard/
 ├── LICENSE.txt
 ├── CONTRIBUTING.md
 ├── conftest.py
-├── .coverage               # ⚙️ relatório de cobertura de testes ❌ não versionar
+├── .coverage               # relatório de cobertura (não versionar)
 ├── .gitignore
 │
-├── config/                 # ⚙️ configuração principal do Django
+├── config/
 │   ├── __init__.py
-│   ├── settings.py         # 🔥 configurações principais
-│   ├── urls.py             # 🔗 rotas globais
-│   ├── wsgi.py             # 🚀 deploy (produção)
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
 │
-├── medicamento/            # 💊 APP PRINCIPAL
+├── medicamento/
 │   ├── __init__.py
-│   ├── admin.py            # painel admin
-│   ├── apps.py             # config do app
-│   ├── models.py           # 🧠 banco de dados
-│   ├── views.py            # 🎯 lógica
-│   ├── urls.py             # rotas do app
-│   ├── forms.py            # formulários
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── forms.py
 │   │
-│   ├── migrations/         # histórico do banco
+│   ├── migrations/
+│   │   ├── __init__.py
 │   │   └── 0001_initial.py
-│   │   └── __init__.py
 │   │
-│   └── templates/          # 🎨 FRONT-END (HTML)
+│   └── templates/
 │       └── medicamento/
 │           ├── base.html
 │           ├── index.html
@@ -101,17 +101,15 @@ medguard/
 │           ├── confirmar_uso.html
 │           └── confirmar_exclusao.html
 │
-├── tests/                  # 🧪 testes automatizados
+├── tests/
 │   ├── __init__.py
-│   ├── test_models.py            
+│   └── test_models.py
 │
-├── __pycache__/            # cache Python ❌ não versionar
-├── .pytest_cache/          # cache do pytest ❌ não versionar
-├── .ruff_cache/            # cache do Ruff ❌ não versionar
-├── .venv/                  # ambiente virtual local ❌ não versionar
-└── .git/                   # controle de versão (não incluído em deploy)
-
-
+├── __pycache__/            # não versionar
+├── .pytest_cache/          # não versionar
+├── .ruff_cache/            # não versionar
+├── .venv/                  # não versionar
+└── .git/                   # controle de versão local
 
 ## Instalação
 
