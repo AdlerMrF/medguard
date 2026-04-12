@@ -1,6 +1,7 @@
 
 from django.contrib import admin
-from .models import Medicamento, HorarioMedicamento, RegistroUso
+
+from .models import HorarioMedicamento, Medicamento, RegistroUso
 
 
 class HorarioInline(admin.TabularInline):

@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .models import Medicamento, HorarioMedicamento, RegistroUso
-from .forms import MedicamentoForm, FiltroForm, RegistroUsoForm
+from .forms import FiltroForm, MedicamentoForm, RegistroUsoForm
+from .models import HorarioMedicamento, Medicamento, RegistroUso
 
 
 def index(request):

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Medicamento, HorarioMedicamento, RegistroUso
+from .models import Medicamento, RegistroUso
 
 
 class MedicamentoForm(forms.ModelForm):

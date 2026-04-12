@@ -1,5 +1,6 @@
 import pytest
-from medicamento.models import Medicamento, HorarioMedicamento
+
+from medicamento.models import HorarioMedicamento, Medicamento
 
 
 @pytest.fixture

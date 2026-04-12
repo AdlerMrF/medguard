@@ -1,7 +1,8 @@
 
 import pytest
 from django.core.exceptions import ValidationError
-from medicamento.models import Medicamento, HorarioMedicamento, RegistroUso
+
+from medicamento.models import HorarioMedicamento, Medicamento, RegistroUso
 
 
 @pytest.mark.django_db
