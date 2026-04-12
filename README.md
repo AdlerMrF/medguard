@@ -20,7 +20,7 @@ Idosos e cuidadores frequentemente enfrentam dificuldades para controlar horári
 
 
 
-O MedGuardian é uma aplicação web simples que permite cadastrar medicamentos com suas doses e horários, e emite alertas quando está na hora de tomá-los (janela de ±10 minutos). Também registra o histórico de uso.
+O MedGuard é uma aplicação web simples que permite cadastrar medicamentos com suas doses e horários, e emite alertas quando está na hora de tomá-los (janela de ±10 minutos). Também registra o histórico de uso.
 
 
 
@@ -55,6 +55,61 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 * pytest / pytest-django
 * ruff
 * GitHub Actions
+
+## Estrutura do Projeto:
+medguard/
+├── manage.py
+├── db.sqlite3              # ⚙️ gerado após migrations ❌ não versionar
+├── requirements.txt
+├── pyproject.toml
+├── README.md
+├── VERSION
+├── CHANGELOG.md
+├── LICENSE.txt
+├── CONTRIBUTING.md
+├── conftest.py
+├── .coverage               # ⚙️ relatório de cobertura de testes ❌ não versionar
+├── .gitignore
+│
+├── config/                 # ⚙️ configuração principal do Django
+│   ├── __init__.py
+│   ├── settings.py         # 🔥 configurações principais
+│   ├── urls.py             # 🔗 rotas globais
+│   ├── wsgi.py             # 🚀 deploy (produção)
+│
+├── medicamento/            # 💊 APP PRINCIPAL
+│   ├── __init__.py
+│   ├── admin.py            # painel admin
+│   ├── apps.py             # config do app
+│   ├── models.py           # 🧠 banco de dados
+│   ├── views.py            # 🎯 lógica
+│   ├── urls.py             # rotas do app
+│   ├── forms.py            # formulários
+│   │
+│   ├── migrations/         # histórico do banco
+│   │   └── 0001_initial.py
+│   │   └── __init__.py
+│   │
+│   └── templates/          # 🎨 FRONT-END (HTML)
+│       └── medicamento/
+│           ├── base.html
+│           ├── index.html
+│           ├── listar.html
+│           ├── cadastrar.html
+│           ├── detalhe.html
+│           ├── alertas.html
+│           ├── confirmar_uso.html
+│           └── confirmar_exclusao.html
+│
+├── tests/                  # 🧪 testes automatizados
+│   ├── __init__.py
+│   ├── test_models.py            
+│
+├── __pycache__/            # cache Python ❌ não versionar
+├── .pytest_cache/          # cache do pytest ❌ não versionar
+├── .ruff_cache/            # cache do Ruff ❌ não versionar
+├── .venv/                  # ambiente virtual local ❌ não versionar
+└── .git/                   # controle de versão (não incluído em deploy)
 
 
 
