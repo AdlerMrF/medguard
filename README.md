@@ -63,14 +63,14 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 # instale o Git escolendo a versão compatível com seu dispositivo 
 -- Site: https://git-scm.com/install/
 
-# Após instalado o Git cleique na sua psta destino de preferêcia, com o uso do botão direito do mouse e selecione a opção "Mostrar mais opções" <img width="506" height="448" alt="1" src="https://github.com/user-attachments/assets/83b4e9a7-2c66-4f08-bbb8-609e12423157" />
+# Após instalado o Git cleique na sua psta destino de preferêcia, com o uso do botão direito do mouse e selecione a opção "Mostrar mais opções"
+<img width="506" height="448" alt="1" src="https://github.com/user-attachments/assets/83b4e9a7-2c66-4f08-bbb8-609e12423157" />
 
-
-# Em sequência clique em "Open Git Bash here" <img width="358" height="444" alt="2" src="https://github.com/user-attachments/assets/fff85595-d534-49ec-95bb-a0a6b3694fed" />
-
+# Em sequência clique em "Open Git Bash here"
+<img width="358" height="444" alt="2" src="https://github.com/user-attachments/assets/fff85595-d534-49ec-95bb-a0a6b3694fed" />
 
 ```bash
-# Clone o repositório
+# No terminal que abrir Clone o repositório com o comando:
 git clone https://github.com/AdlerMrF/medguard.git
 cd medguard
 
