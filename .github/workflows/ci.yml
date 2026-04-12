@@ -39,4 +39,4 @@ jobs:
         run: pytest tests/ -v --cov=medicamento --cov-report=term-missing
 
       - name: ✅ Verificar versão
-        run: python -c "import tomllib; d=tomllib.loads(open('pyproject.toml').read()); print('Versão:', d['project']['version'])"
+        run: grep '^version' pyproject.toml
