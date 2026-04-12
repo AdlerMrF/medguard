@@ -63,12 +63,12 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/medguardian.git
-cd medguardian
+git clone https://github.com/AdlerMrF/medguard.git
+cd medguard
 
 # Crie e ative o ambiente virtual
 python -m venv .venv
-.venv\\Scripts\\activate   # Windows
+.venv\\Scripts\\activate ou .venv/Scripts/activate  # Windows
 source .venv/bin/activate  # Linux/Mac
 
 # Instale as dependências
