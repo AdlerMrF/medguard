@@ -57,6 +57,9 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 * GitHub Actions
 
 ## Estrutura do Projeto:
+## Estrutura do Projeto
+
+```bash
 medguard/
 ├── manage.py
 ├── db.sqlite3              # gerado após migrations (não versionar)
@@ -110,6 +113,7 @@ medguard/
 ├── .ruff_cache/            # não versionar
 ├── .venv/                  # não versionar
 └── .git/                   # controle de versão local
+```
 
 ## Instalação
 
