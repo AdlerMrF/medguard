@@ -1,5 +1,5 @@
 [project]
-name = "MedGuardian"
+name = "MedGuard"
 version = "1.0.0"
 description = "Controle de medicamentos para idosos — aplicação web com Django"
 readme = "README.md"
