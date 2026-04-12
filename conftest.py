@@ -1,12 +1,9 @@
-"""Fixtures compartilhadas para os testes."""
-
 import pytest
 from medicamento.models import Medicamento, HorarioMedicamento
 
 
 @pytest.fixture
 def medicamento_basico(db):
-    """Cria um medicamento básico para testes."""
     med = Medicamento.objects.create(
         nome="Losartana",
         dose="50mg",
@@ -19,7 +16,6 @@ def medicamento_basico(db):
 
 @pytest.fixture
 def medicamento_baixo(db):
-    """Cria medicamento de importância baixa."""
     med = Medicamento.objects.create(
         nome="Vitamina D",
         dose="1 cápsula",

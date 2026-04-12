@@ -1,4 +1,3 @@
-"""Configuração do admin para o app de medicamentos."""
 
 from django.contrib import admin
 from .models import Medicamento, HorarioMedicamento, RegistroUso

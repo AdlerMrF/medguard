@@ -1,5 +1,3 @@
-"""Formulários do app de medicamentos."""
-
 from django import forms
 
 from .models import Medicamento, HorarioMedicamento, RegistroUso

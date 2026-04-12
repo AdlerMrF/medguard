@@ -1,7 +1,3 @@
-"""
-Configurações do Django para o Gerenciador de Gastos Pessoais.
-"""
-
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent

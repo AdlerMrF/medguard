@@ -1,11 +1,8 @@
-"""Testes dos modelos do MedGuardian."""
 
 import pytest
 from django.core.exceptions import ValidationError
 from medicamento.models import Medicamento, HorarioMedicamento, RegistroUso
 
-
-# ─── Caminho feliz ───────────────────────────────────────────
 
 @pytest.mark.django_db
 class TestMedicamentoCriacao:
@@ -52,8 +49,6 @@ class TestMedicamentoCriacao:
         assert "❌" in str(registro)
 
 
-# ─── Entradas inválidas ──────────────────────────────────────
-
 @pytest.mark.django_db
 class TestMedicamentoValidacao:
     def test_nome_vazio_levanta_validation_error(self):
@@ -76,8 +71,6 @@ class TestMedicamentoValidacao:
         with pytest.raises(ValidationError):
             med.full_clean()
 
-
-# ─── Casos limite ────────────────────────────────────────────
 
 @pytest.mark.django_db
 class TestMedicamentoCasosLimite:

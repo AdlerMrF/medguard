@@ -1,4 +1,3 @@
-"""Configuração WSGI para o projeto."""
 
 import os
 

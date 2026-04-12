@@ -1,5 +1,3 @@
-"""Views do app de medicamentos."""
-
 from datetime import datetime, timedelta
 
 from django.shortcuts import render, get_object_or_404, redirect
