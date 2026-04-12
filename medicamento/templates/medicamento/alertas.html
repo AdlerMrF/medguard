@@ -1,0 +1,36 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Alertas{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 style="margin-bottom:0.5rem">⏰ Alertas — {{ agora }}</h2>
+  <p style="color:#718096; margin-bottom:1rem">Medicamentos para tomar agora (±10 minutos)</p>
+
+  {% if alertas %}
+    {% for med in alertas %}
+    <div style="border:2px solid #f6ad55; border-radius:12px; padding:1rem; margin-bottom:1rem; background:#fffaf0">
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <div>
+          <strong style="font-size:1.1rem">💊 {{ med.nome }}</strong>
+          <span style="margin-left:0.8rem; color:#718096">{{ med.dose }}</span>
+          <span class="badge badge-{{ med.importancia }}" style="margin-left:0.5rem">{{ med.get_importancia_display }}</span>
+        </div>
+        <a href="{% url 'medicamento:confirmar_uso' med.pk %}" class="btn btn-success">✔ Confirmar uso</a>
+      </div>
+      <div style="margin-top:0.5rem">
+        {% for h in med.horarios.all %}
+          <span style="background:#ebf8ff; color:#2b6cb0; padding:2px 8px; border-radius:999px; font-size:0.85rem; margin-right:4px">
+            {{ h.horario|time:"H:i" }}
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center; padding:3rem; color:#718096">
+      <div style="font-size:3rem">✅</div>
+      <p style="margin-top:1rem; font-size:1.1rem">Nenhum medicamento para tomar agora.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

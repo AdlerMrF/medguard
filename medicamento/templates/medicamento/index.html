@@ -1,0 +1,33 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 style="margin-bottom:0.5rem">👋 Bem-vindo ao MedGuardian</h2>
+  <p style="color:#718096">Seu assistente de controle de medicamentos para idosos.</p>
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(3,1fr); gap:1rem; margin-bottom:1.5rem">
+  <div class="card" style="text-align:center">
+    <div style="font-size:2.5rem">💊</div>
+    <div style="font-size:2rem; font-weight:bold; color:#3182ce">{{ total_medicamentos }}</div>
+    <div style="color:#718096">Medicamentos cadastrados</div>
+  </div>
+  <div class="card" style="text-align:center">
+    <div style="font-size:2.5rem">🚨</div>
+    <div style="font-size:2rem; font-weight:bold; color:#e53e3e">{{ total_altos }}</div>
+    <div style="color:#718096">Importância Alta</div>
+  </div>
+  <div class="card" style="text-align:center">
+    <div style="font-size:2.5rem">✅</div>
+    <div style="font-size:2rem; font-weight:bold; color:#38a169">{{ tomados_hoje }}</div>
+    <div style="color:#718096">Tomados hoje</div>
+  </div>
+</div>
+
+<div class="card" style="display:flex; gap:1rem; flex-wrap:wrap">
+  <a href="{% url 'medicamento:cadastrar' %}" class="btn btn-primary">➕ Cadastrar Medicamento</a>
+  <a href="{% url 'medicamento:listar' %}"    class="btn btn-secondary">📋 Ver Todos</a>
+  <a href="{% url 'medicamento:alertas' %}"   class="btn btn-warning">⏰ Verificar Alertas</a>
+</div>
+{% endblock %}

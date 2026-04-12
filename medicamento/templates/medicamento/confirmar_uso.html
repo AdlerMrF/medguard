@@ -1,0 +1,30 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Confirmar Uso{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px; margin:0 auto">
+  <h2 style="margin-bottom:0.5rem">✔️ Confirmar Uso</h2>
+  <p style="color:#718096; margin-bottom:1.5rem">
+    Medicamento: <strong>{{ med.nome }}</strong> — {{ med.dose }}
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="field">
+      {{ form.tomado.label_tag }}
+      {{ form.tomado }}
+    </div>
+
+    <div class="field">
+      {{ form.observacao.label_tag }}
+      {{ form.observacao }}
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:1rem">
+      <button type="submit" class="btn btn-primary">💾 Registrar</button>
+      <a href="{% url 'medicamento:alertas' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

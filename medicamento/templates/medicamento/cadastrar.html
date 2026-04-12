@@ -1,0 +1,46 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Cadastrar Medicamento{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:600px; margin:0 auto">
+  <h2 style="margin-bottom:1.5rem">➕ Cadastrar Medicamento</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="field">
+      {{ form.nome.label_tag }}
+      {{ form.nome }}
+      {% if form.nome.errors %}<ul class="errorlist">{% for e in form.nome.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+
+    <div class="field">
+      {{ form.horarios_texto.label_tag }}
+      {{ form.horarios_texto }}
+      <p class="help-text">{{ form.horarios_texto.help_text }}</p>
+      {% if form.horarios_texto.errors %}<ul class="errorlist">{% for e in form.horarios_texto.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+
+    <div class="field">
+      {{ form.dose.label_tag }}
+      {{ form.dose }}
+      {% if form.dose.errors %}<ul class="errorlist">{% for e in form.dose.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+
+    <div class="field">
+      {{ form.importancia.label_tag }}
+      {{ form.importancia }}
+    </div>
+
+    <div class="field">
+      {{ form.observacoes.label_tag }}
+      {{ form.observacoes }}
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:1rem">
+      <button type="submit" class="btn btn-primary">💾 Salvar</button>
+      <a href="{% url 'medicamento:listar' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Remover Medicamento{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px; margin:0 auto; text-align:center">
+  <div style="font-size:3rem; margin-bottom:1rem">🗑️</div>
+  <h2 style="margin-bottom:0.5rem">Confirmar Remoção</h2>
+  <p style="color:#718096; margin-bottom:1.5rem">
+    Deseja realmente remover <strong>{{ med.nome }}</strong>?<br>
+    <span style="color:#e53e3e; font-size:0.9rem">Esta ação não pode ser desfeita.</span>
+  </p>
+
+  <form method="post" style="display:flex; gap:1rem; justify-content:center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">✅ Sim, remover</button>
+    <a href="{% url 'medicamento:listar' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

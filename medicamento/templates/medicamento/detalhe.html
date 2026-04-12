@@ -1,0 +1,60 @@
+{% extends "medicamento/base.html" %}
+{% block title %}{{ med.nome }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:start">
+    <div>
+      <h2>💊 {{ med.nome }}</h2>
+      <p style="color:#718096; margin-top:0.3rem">Dose: <strong>{{ med.dose }}</strong></p>
+    </div>
+    <span class="badge badge-{{ med.importancia }}" style="font-size:0.95rem; padding:0.4rem 1rem">
+      {{ med.get_importancia_display }}
+    </span>
+  </div>
+
+  <hr style="margin:1rem 0; border-color:#e2e8f0">
+
+  <h3 style="margin-bottom:0.5rem">⏰ Horários</h3>
+  <div style="display:flex; gap:0.5rem; flex-wrap:wrap">
+    {% for h in med.horarios.all %}
+      <span style="background:#ebf8ff; color:#2b6cb0; padding:0.3rem 0.8rem; border-radius:999px; font-weight:600">
+        {{ h.horario|time:"H:i" }}
+      </span>
+    {% empty %}
+      <p style="color:#718096">Nenhum horário cadastrado.</p>
+    {% endfor %}
+  </div>
+
+  {% if med.observacoes %}
+    <hr style="margin:1rem 0; border-color:#e2e8f0">
+    <h3>📝 Observações</h3>
+    <p style="margin-top:0.5rem; color:#4a5568">{{ med.observacoes }}</p>
+  {% endif %}
+
+  <hr style="margin:1rem 0; border-color:#e2e8f0">
+
+  <h3 style="margin-bottom:0.5rem">📊 Últimos 10 registros</h3>
+  {% if registros %}
+    <table>
+      <thead><tr><th>Data</th><th>Horário</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for r in registros %}
+        <tr>
+          <td>{{ r.data }}</td>
+          <td>{{ r.horario|time:"H:i" }}</td>
+          <td>{% if r.tomado %}✅ Tomado{% else %}❌ Não tomado{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p style="color:#718096">Nenhum registro ainda.</p>
+  {% endif %}
+
+  <div style="display:flex; gap:1rem; margin-top:1.5rem">
+    <a href="{% url 'medicamento:listar' %}"        class="btn btn-secondary">← Voltar</a>
+    <a href="{% url 'medicamento:remover' med.pk %}" class="btn btn-danger">🗑 Remover</a>
+  </div>
+</div>
+{% endblock %}

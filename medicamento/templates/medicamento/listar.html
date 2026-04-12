@@ -1,0 +1,60 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Medicamentos{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem">
+    <h2>📋 Medicamentos Cadastrados</h2>
+    <a href="{% url 'medicamento:cadastrar' %}" class="btn btn-primary">➕ Novo</a>
+  </div>
+
+  <form method="get" style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem">
+    <div style="flex:1; min-width:200px">
+      {{ form.nome.label_tag }}
+      {{ form.nome }}
+    </div>
+    <div style="flex:1; min-width:160px">
+      {{ form.importancia.label_tag }}
+      {{ form.importancia }}
+    </div>
+    <div style="display:flex; align-items:flex-end">
+      <button type="submit" class="btn btn-primary">🔍 Filtrar</button>
+    </div>
+  </form>
+
+  {% if medicamentos %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Nome</th><th>Dose</th><th>Horários</th><th>Importância</th><th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for med in medicamentos %}
+        <tr>
+          <td>{{ med.pk }}</td>
+          <td><strong>{{ med.nome }}</strong></td>
+          <td>{{ med.dose }}</td>
+          <td>
+            {% for h in med.horarios.all %}
+              <span style="background:#ebf8ff; color:#2b6cb0; padding:2px 8px; border-radius:999px; font-size:0.85rem; margin-right:4px">
+                {{ h.horario|time:"H:i" }}
+              </span>
+            {% empty %}—{% endfor %}
+          </td>
+          <td>
+            <span class="badge badge-{{ med.importancia }}">{{ med.get_importancia_display }}</span>
+          </td>
+          <td style="display:flex; gap:0.5rem">
+            <a href="{% url 'medicamento:detalhe' med.pk %}" class="btn btn-secondary" style="padding:0.3rem 0.7rem; font-size:0.8rem">👁</a>
+            <a href="{% url 'medicamento:remover' med.pk %}" class="btn btn-danger"    style="padding:0.3rem 0.7rem; font-size:0.8rem">🗑</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p style="color:#718096; text-align:center; padding:2rem">⚠️ Nenhum medicamento encontrado.</p>
+  {% endif %}
+</div>
+{% endblock %}
