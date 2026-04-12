@@ -60,14 +60,8 @@ Idosos, cuidadores e familiares responsáveis pela administração de medicament
 
 ## Instalação
 
-# instale o Git escolendo a versão compatível com seu dispositivo 
--- Site: https://git-scm.com/install/
-
-# Após instalado o Git cleique na sua psta destino de preferêcia, com o uso do botão direito do mouse e selecione a opção "Mostrar mais opções"
-<img width="506" height="448" alt="1" src="https://github.com/user-attachments/assets/83b4e9a7-2c66-4f08-bbb8-609e12423157" />
-
-# Em sequência clique em "Open Git Bash here"
-<img width="358" height="444" alt="2" src="https://github.com/user-attachments/assets/fff85595-d534-49ec-95bb-a0a6b3694fed" />
+# inicializar o terminal prompt de comando CMD ou Powershell, clicando com botão direito na pasta de preferência e clicando em "Abrir Terminal":
+<img width="436" height="366" alt="1" src="https://github.com/user-attachments/assets/e13ee9a8-0b73-4762-9c82-ef5a8045cdcb" />
 
 ```bash
 # No terminal que abrir Clone o repositório com o comando:
