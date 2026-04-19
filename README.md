@@ -141,12 +141,12 @@ python manage.py createsuperuser
 
 # Rode o servidor
 python manage.py runserver
-```
+
 
 Acesse em: http://127.0.0.1:8000
-
+```
 ## Exemplo de teste
-
+```
 # Ao rodarmos http://127.0.0.1:8000, será apresentada a tela inicial do Programa: 
 <img width="1916" height="956" alt="2" src="https://github.com/user-attachments/assets/35432764-7de8-41b8-acb2-c6022f9814e5" />
 
@@ -169,6 +169,7 @@ Acesse em: http://127.0.0.1:8000
 # Ao confirmar o uso o medicamento aparecerá como tomado:
 <img width="650" height="432" alt="9" src="https://github.com/user-attachments/assets/1fd150ed-65ec-4a2a-8aca-ae305758c53a" />
 <img width="880" height="480" alt="10" src="https://github.com/user-attachments/assets/843504ae-fc4c-4cbd-a6cd-7a0d3c4c96dd" />
+``` 
 
 ## Testes
 
