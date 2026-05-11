@@ -1,8 +1,13 @@
+import requests
+
 from datetime import datetime
 
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+
 
 from .forms import FiltroForm, MedicamentoForm, RegistroUsoForm
 from .models import HorarioMedicamento, Medicamento, RegistroUso
@@ -113,3 +118,36 @@ def confirmar_uso(request, pk):
         form = RegistroUsoForm()
 
     return render(request, "medicamento/confirmar_uso.html", {"med": med, "form": form})
+
+@require_GET
+def buscar_bula_medicamento(request, nome_medicamento):
+    url = "http://api.fda.gov/drug/label.json"
+    params = {
+        "search": f"openfda.brand_name:{nome_medicamento}",
+        "limit":1
+    }
+
+
+try:
+    response = requests.get(url,, params=params, timeout=5)
+    response.raise_for_status()
+    data = response.json()
+
+    results = data.get("results", [])
+    if not results:
+        return JsonResponse({"erro": "Esse medicamneto não foi encontrado"}, status=404)
+
+    bula = results[0]
+    info = {
+        "nome": nome_medicamento,
+        "para_qual_finalidade": bula.get("purpose", ["Não informado"])[0],
+            "avisos": bula.get("warnings", ["Não informado"])[0],
+            "efeitos_adversos": bula.get("adverse_reactions", ["Não informado"])[0],
+        }
+        return JsonResponse(info)
+
+    except requests.exceptions.Timeout:
+        return JsonResponse({"erro": "Tempo de resposta da API excedido"}, status=504)
+        
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({"erro": f"Erro ao consultar a API: {str(e)}"}, status=502)
