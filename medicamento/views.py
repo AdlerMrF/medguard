@@ -121,9 +121,9 @@ def confirmar_uso(request, pk):
 
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):
-    url = "http://api.fda.gov/drug/label.json"
+    url = "https://api.fda.gov/drug/label.json"
     params = {
-        "search": f"openfda.brand_name:{nome_medicamento}",
+        "search": f"openfda.brand_name:{nome_medicamento}+OR+openfds.generic_name: {nome_medicamento}",
         "limit": 1
     }
 

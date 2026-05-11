@@ -11,7 +11,7 @@ class TestBulaAPIView:
     def setup_method(self):
         self.client = Client()
 
-    @patch("Medicamento.views.requests.get")
+    @patch("medicamento.views.requests.get")
     def test_buscar_bula_sucesso(self, mock_get):
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -33,7 +33,7 @@ class TestBulaAPIView:
         assert response.status_code == 200
         data = json.loads(response.content)
         assert data["nome"] == "paracetamol"
-        assert data["proposito"] == "Alívio da dor e febre"
+        assert data["para_qual_finalidade"] == "Alívio da dor e febre"
         assert data["avisos"] == "Não usar com álcool"
         assert data["efeitos_adversos"] == "Náusea, tontura"
 
