@@ -4,12 +4,10 @@
 
 
 [![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml)
-![Version](https://github.com/AdlerMrF/medguard/blob/main/VERSION)
-![Python](https://shields.io)
-![HTML](https://shields.io)
-![Top Language](https://shields.io)
-![License](https://shields.io)
-
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Python](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.0.6-092E20?logo=django&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Descrição do Problema
 
