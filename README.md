@@ -4,8 +4,11 @@
 
 
 [![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml)
-
-
+![Version](https://shields.io)
+![Python](https://shields.io)
+![HTML](https://shields.io)
+![Top Language](https://shields.io)
+![License](https://shields.io)
 
 
 ## Descrição do Problema
