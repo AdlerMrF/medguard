@@ -122,12 +122,10 @@ def confirmar_uso(request, pk):
 def buscar_bula_medicamento(request, nome_medicamento):
     url = "https://api.fda.gov/drug/label.json"
     params = {
-        "search": f"openfda.brand_name:{nome_medicamento}+OR+openfda.generic_name:{nome_medicamento}",
+        "search": f'openfda.brand_name:"{nome_medicamento}"+openfda.generic_name:"{nome_medicamento}"',
         "limit": 1
-    }
-
     try:
-        response = requests.get(url, params=params, timeout=5)
+        response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
 
