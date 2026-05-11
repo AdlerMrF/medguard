@@ -4,7 +4,7 @@
 
 
 [![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml)
-![Version](https://shields.io)
+![Version](https://github.com/AdlerMrF/medguard/blob/main/VERSION)
 ![Python](https://shields.io)
 ![HTML](https://shields.io)
 ![Top Language](https://shields.io)
