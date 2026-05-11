@@ -129,7 +129,7 @@ def buscar_bula_medicamento(request, nome_medicamento):
 
 
 try:
-    response = requests.get(url,, params=params, timeout=5)
+    response = requests.get(url, params=params, timeout=5)
     response.raise_for_status()
     data = response.json()
 
