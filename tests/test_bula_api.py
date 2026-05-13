@@ -28,7 +28,7 @@ class TestBulaAPIView:
         }
         mock_get.return_value = mock_response
 
-        url = reverse("buscar_bula", kwargs={"nome_medicamento": "paracetamol"})
+        url = reverse("medicamento:buscar_bula", kwargs={"nome_medicamento": "paracetamol"})
         response = self.client.get(url)
 
         assert response.status_code == 200
@@ -46,7 +46,7 @@ class TestBulaAPIView:
         mock_response.json.return_value = {"results": []}
         mock_get.return_value = mock_response
 
-        url = reverse("buscar_bula", kwargs={"nome_medicamento": "xyzinexistente"})
+        url = reverse("medicamento:buscar_bula", kwargs={"nome_medicamento": "xyzinexistente"})
         response = self.client.get(url)
 
         assert response.status_code == 404
@@ -59,7 +59,7 @@ class TestBulaAPIView:
         import requests as req_lib
         mock_get.side_effect = req_lib.exceptions.Timeout()
 
-        url = reverse("buscar_bula", kwargs={"nome_medicamento": "paracetamol"})
+        url = reverse("medicamento:buscar_bula", kwargs={"nome_medicamento": "paracetamol"})
         response = self.client.get(url)
 
         assert response.status_code == 504
