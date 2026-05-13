@@ -1,10 +1,11 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-medguardian-dev-key-troque-em-producao"
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-medguardian-dev-key-troque-em-producao")
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -20,6 +21,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -69,4 +71,5 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://*.app.github.dev",
     "https://*.github.dev",
+    "https://*.onrender.com",
 ]
