@@ -52,9 +52,42 @@
     <p style="color:#718096">Nenhum registro ainda.</p>
   {% endif %}
 
+  <!-- ✅ ADICIONADO AQUI: seção da bula -->
+  <hr style="margin:1rem 0; border-color:#e2e8f0">
+
+  <section id="info-bula">
+    <h3>📋 Informações de Bula (Open FDA)</h3>
+    <div id="bula-content">
+      <p style="color:#718096">Carregando informações...</p>
+    </div>
+  </section>
+
   <div style="display:flex; gap:1rem; margin-top:1.5rem">
-    <a href="{% url 'medicamento:listar' %}"        class="btn btn-secondary">← Voltar</a>
+    <a href="{% url 'medicamento:listar' %}"         class="btn btn-secondary">← Voltar</a>
     <a href="{% url 'medicamento:remover' med.pk %}" class="btn btn-danger">🗑 Remover</a>
   </div>
 </div>
+
+<script>
+  const nomeMedicamento = "{{ med.nome }}";
+
+  fetch(`/bula/${encodeURIComponent(nomeMedicamento)}/`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.erro) {
+        document.getElementById("bula-content").innerHTML =
+          `<p style="color:#d69e2e">⚠️ ${data.erro}</p>`;
+        return;
+      }
+      document.getElementById("bula-content").innerHTML = `
+        <p><strong>Finalidade:</strong> ${data.para_qual_finalidade}</p>
+        <p><strong>Avisos:</strong> ${data.avisos}</p>
+        <p><strong>Efeitos Adversos:</strong> ${data.efeitos_adversos}</p>
+      `;
+    })
+    .catch(() => {
+      document.getElementById("bula-content").innerHTML =
+        '<p style="color:#e53e3e">Erro ao carregar informações da bula.</p>';
+    });
+</script>
 {% endblock %}
