@@ -1,9 +1,10 @@
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from django.test import Client
 from django.urls import reverse
+
 
 @pytest.mark.django_db
 class TestBulaAPIView:
