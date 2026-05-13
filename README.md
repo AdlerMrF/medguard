@@ -2,7 +2,6 @@
 
 ## 🔗 [Acesse a aplicação](https://medguard-2khx.onrender.com)
 
-
 [![CI](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml/badge.svg)](https://github.com/AdlerMrF/medguard/actions/workflows/ci.yml)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)
