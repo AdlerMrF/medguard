@@ -72,23 +72,29 @@ medguard/
 ├── LICENSE.txt
 ├── CONTRIBUTING.md
 ├── conftest.py
+├── build.sh                # script de build para deploy
 ├── .coverage               # relatório de cobertura (não versionar)
 ├── .gitignore
+│
+├── .github/                # integração contínua
+│   └── workflows/
+│       └── ci.yml          # pipeline: lint (Ruff) + testes + migrate
 │
 ├── config/
 │   ├── __init__.py
 │   ├── settings.py
+│   ├── settings.py.save    # backup local do settings (não versionar)
 │   ├── urls.py
-│   ├── wsgi.py
+│   └── wsgi.py
 │
 ├── medicamento/
 │   ├── __init__.py
-│   ├── admin.py
+│   ├── admin.py            # registra Medicamento, HorarioMedicamento, RegistroUso
 │   ├── apps.py
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── forms.py
+│   ├── models.py           # models: Medicamento, HorarioMedicamento, RegistroUso
+│   ├── views.py            # inclui view buscar_bula_medicamento (integração openFDA)
+│   ├── urls.py             # inclui rota /bula/<nome_medicamento>/
+│   ├── forms.py            # MedicamentoForm, FiltroForm, RegistroUsoForm
 │   │
 │   ├── migrations/
 │   │   ├── __init__.py
@@ -105,9 +111,12 @@ medguard/
 │           ├── confirmar_uso.html
 │           └── confirmar_exclusao.html
 │
+├── staticfiles/            # gerado pelo collectstatic / WhiteNoise (não versionar)
+│
 ├── tests/
 │   ├── __init__.py
-│   └── test_models.py
+│   ├── test_models.py
+│   └── test_bula_api.py    # testes da integração com a API openFDA
 │
 ├── __pycache__/            # não versionar
 ├── .pytest_cache/          # não versionar
