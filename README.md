@@ -180,6 +180,14 @@ Acesse em: http://127.0.0.1:8000
 <img width="650" height="432" alt="9" src="https://github.com/user-attachments/assets/1fd150ed-65ec-4a2a-8aca-ae305758c53a" />
 <img width="880" height="480" alt="10" src="https://github.com/user-attachments/assets/843504ae-fc4c-4cbd-a6cd-7a0d3c4c96dd" />
 
+# Teste da API, criei dois medicamentos, um com o nome "aspirin" e o outro com o nome "ibuprofen" que em português são aspirina e ibuprofeno reespectivamente: 
+<img width="1906" height="887" alt="Captura de tela 2026-05-17 122656" src="https://github.com/user-attachments/assets/73b7fc75-234f-457f-a694-3ea7053e168d" />
+
+
+# Teste da API com resultados: 
+<img width="1040" height="922" alt="Captura de tela 2026-05-17 122709" src="https://github.com/user-attachments/assets/cb76e5de-7c54-4470-8676-a0657772d0b5" />
+<img width="962" height="843" alt="Captura de tela 2026-05-17 122720" src="https://github.com/user-attachments/assets/d202b545-2425-445a-bfa3-22825d510446" />
+
 
 ## Testes
 
