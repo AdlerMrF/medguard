@@ -9,6 +9,11 @@ from django.views.decorators.http import require_GET
 
 from .forms import FiltroForm, MedicamentoForm, RegistroUsoForm
 from .models import HorarioMedicamento, Medicamento, RegistroUso
+from .traducao import (
+    NAO_INFORMADO,
+    traduzir_nome_para_ingles,
+    traduzir_texto_para_portugues,
+)
 
 
 def index(request):
@@ -119,10 +124,16 @@ def confirmar_uso(request, pk):
 
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):
+    # O usuário digita em português; a openFDA só entende o termo em inglês.
+    nome_ingles = traduzir_nome_para_ingles(nome_medicamento)
+
     url = "https://api.fda.gov/drug/label.json"
     params = {
-        "search": f'openfda.brand_name:"{nome_medicamento}"+openfda.generic_name:"{nome_medicamento}"',
-        "limit": 1
+        "search": (
+            f'openfda.generic_name:"{nome_ingles}" '
+            f'OR openfda.brand_name:"{nome_ingles}"'
+        ),
+        "limit": 1,
     }
 
     try:
@@ -135,11 +146,19 @@ def buscar_bula_medicamento(request, nome_medicamento):
             return JsonResponse({"erro": "Esse medicamento não foi encontrado"}, status=404)
 
         bula = results[0]
+        # A bula vem em inglês; traduzimos cada campo de volta para português.
         info = {
             "nome": nome_medicamento,
-            "para_qual_finalidade": bula.get("purpose", ["Não informado"])[0],
-            "avisos": bula.get("warnings", ["Não informado"])[0],
-            "efeitos_adversos": bula.get("adverse_reactions", ["Não informado"])[0],
+            "nome_consultado": nome_ingles,
+            "para_qual_finalidade": traduzir_texto_para_portugues(
+                bula.get("purpose", [NAO_INFORMADO])[0]
+            ),
+            "avisos": traduzir_texto_para_portugues(
+                bula.get("warnings", [NAO_INFORMADO])[0]
+            ),
+            "efeitos_adversos": traduzir_texto_para_portugues(
+                bula.get("adverse_reactions", [NAO_INFORMADO])[0]
+            ),
         }
         return JsonResponse(info)
 

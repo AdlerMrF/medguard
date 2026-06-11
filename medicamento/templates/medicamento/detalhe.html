@@ -80,6 +80,9 @@
         return;
       }
       document.getElementById("bula-content").innerHTML = `
+        <p style="color:#718096; font-size:.85rem">
+          Fonte: openFDA (consultado como "${data.nome_consultado}") · traduzido para português
+        </p>
         <p><strong>Finalidade:</strong> ${data.para_qual_finalidade}</p>
         <p><strong>Avisos:</strong> ${data.avisos}</p>
         <p><strong>Efeitos Adversos:</strong> ${data.efeitos_adversos}</p>
