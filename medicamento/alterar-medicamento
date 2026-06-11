@@ -1,51 +1,53 @@
-// 1. Simulação do cadastro atual do medicamento no sistema
-let cadastroMedicamento = {
-    id: "med-123",
-    nome: "Dipirona Monohidratada",
-    dosagem: "500mg",
-    frequencia: "De 6 em 6 horas",
-    instrucoes: "Tomar após as refeições."
-};
+// Função para abrir o formulário com os dados atuais da Loratadina
+function abrirFormularioEditar() {
+    // 1. Pega os dados que já estão na tabela
+    const nomeAtual = document.getElementById("med-nome-1").innerText;
+    const doseAtual = document.getElementById("med-dose-1").innerText;
+    
+    // 2. Joga esses dados para dentro dos inputs do formulário de alteração
+    document.getElementById("input-alterar-nome").value = nomeAtual;
+    document.getElementById("input-alterar-dose").value = doseAtual;
+    
+    // 3. Mostra o painel do formulário na tela (reovendo o 'display: none')
+    document.getElementById("painel-formulario-edicao").style.display = "block";
+}
 
-/**
- * Função responsável por alterar o cadastro do medicamento
- * @param {string} novoNome 
- * @param {string} novaDosagem 
- * @param {string} novaFrequencia 
- * @param {string} novasInstrucoes 
- */
-function alterarCadastroMedicamento(novoNome, novaDosagem, novaFrequencia, novasInstrucoes) {
-    // Validação simples: não permite salvar se o nome estiver em branco
-    if (!novoNome || novoNome.trim() === "") {
-        alert("Erro: O nome do medicamento é obrigatório para o cadastro!");
+// Função que executa a TROCA do medicamento de fato
+function salvarAlteracaoMedicamento(event) {
+    event.preventDefault(); // Impede a página de recarregar
+
+    // 1. Pega os novos valores que o usuário digitou no momento que quis alterar
+    const novoNome = document.getElementById("input-alterar-nome").value;
+    const novaDose = document.getElementById("input-alterar-dose").value;
+    const novaImportancia = document.getElementById("select-alterar-importancia").value;
+
+    // Validação simples para não salvar em branco
+    if (!novoNome.trim() || !novaDose.trim()) {
+        alert("Por favor, preencha o nome e a dose do novo medicamento!");
         return;
     }
 
-    // 2. Altera os dados no objeto de cadastro (Lógica de Banco/Memória)
-    cadastroMedicamento.nome = novoNome;
-    cadastroMedicamento.dosagem = novaDosagem;
-    cadastroMedicamento.frequencia = novaFrequencia;
-    cadastroMedicamento.instrucoes = novasInstrucoes;
+    // 2. ALTERAÇÃO NO HTML: Substitui os dados velhos da Loratadina pelos novos na tabela
+    document.getElementById("med-nome-1").innerText = novoNome;
+    document.getElementById("med-dose-1").innerText = novaDose;
+    
+    // Atualiza a etiqueta de importância (Mudando a cor do HTML baseado na escolha)
+    const tagImportancia = document.getElementById("med-importancia-1");
+    tagImportancia.innerText = novaImportancia;
+    
+    if (novaImportancia === "Urgente" || novaImportancia === "Alta") {
+        tagImportancia.style.backgroundColor = "#ffcccc";
+        tagImportancia.style.color = "#cc0000";
+    } else {
+        tagImportancia.style.backgroundColor = "#fef9e7";
+        tagImportancia.style.color = "#b7950b"; // Amarelo/Médio original
+    }
 
-    console.log("Cadastro alterado com sucesso no sistema:", cadastroMedicamento);
-
-    // 3. Altera o HTML para refletir o novo cadastro na tela do usuário
-    document.getElementById("txt-nome").innerText = cadastroMedicamento.nome;
-    document.getElementById("txt-dosagem").innerText = cadastroMedicamento.dosagem;
-    document.getElementById("txt-frequencia").innerText = cadastroMedicamento.frequencia;
-    document.getElementById("txt-instrucoes").innerText = cadastroMedicamento.instrucoes;
-
-    alert("O cadastro do medicamento foi alterado com sucesso!");
+    // 3. Fecha o formulário após salvar
+    fecharFormulario();
+    alert("Medicamento trocado com sucesso no sistema!");
 }
 
-// Exemplo de como o seu botão do HTML chamaria essa função ao ser clicado:
-function buscarNovosDadosDaTela() {
-    // Pega os valores que o usuário digitou nos campos de texto (inputs)
-    let nomeDigitado = document.getElementById("input-nome").value;
-    let dosagemDigitada = document.getElementById("input-dosagem").value;
-    let frequenciaDigitada = document.getElementById("input-frequencia").value;
-    let instrucoesDigitadas = document.getElementById("input-instrucoes").value;
-
-    // Dispara a função principal de alteração
-    alterarCadastroMedicamento(nomeDigitado, dosagemDigitada, frequenciaDigitada, instrucoesDigitadas);
+function fecharFormulario() {
+    document.getElementById("painel-formulario-edicao").style.display = "none";
 }
