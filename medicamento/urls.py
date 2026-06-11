@@ -13,4 +13,8 @@ urlpatterns = [
     path("alertas/", views.alertas, name="alertas"),
     path("alertas/<int:pk>/confirmar/", views.confirmar_uso, name="confirmar_uso"),
     path("bula/<str:nome_medicamento>/", views.buscar_bula_medicamento, name="buscar_bula"),
+    # ... outras rotas anteriores ...
+    path("bula/<str:nome_medicamento>/", views.buscar_bula_medicamento, name="buscar_bula"),
+    path("medicamentos/<int:pk>/alterar/", views.alterar, name="alterar"), # Padrão corrigido aqui!
 ]
+

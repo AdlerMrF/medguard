@@ -46,8 +46,9 @@
             <span class="badge badge-{{ med.importancia }}">{{ med.get_importancia_display }}</span>
           </td>
           <td style="display:flex; gap:0.5rem">
-            <a href="{% url 'medicamento:detalhe' med.pk %}" class="btn btn-secondary" style="padding:0.3rem 0.7rem; font-size:0.8rem">👁</a>
-            <a href="{% url 'medicamento:remover' med.pk %}" class="btn btn-danger"    style="padding:0.3rem 0.7rem; font-size:0.8rem">🗑</a>
+            <a href="{% url 'medicamento:detalhe' med.pk %}" class="btn btn-secondary" style="padding:0.3rem 0.7rem; font-size:0.8rem" title="Visualizar">👁</a>
+            <a href="{% url 'medicamento:alterar' med.pk %}" class="btn btn-warning" style="padding:0.3rem 0.7rem; font-size:0.8rem; background-color: #ecc94b; border-color: #ecc94b; color: #fff;" title="Editar">✏️</a>
+            <a href="{% url 'medicamento:remover' med.pk %}" class="btn btn-danger" style="padding:0.3rem 0.7rem; font-size:0.8rem" title="Excluir">🗑</a>
           </td>
         </tr>
         {% endfor %}
