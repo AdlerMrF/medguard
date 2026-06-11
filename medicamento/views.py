@@ -1,32 +1,56 @@
+from datetime import datetime
+
+import requests
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Medicamento  # Certifique-se de que o nome do modelo está correto
+from django.http import JsonResponse
+from django.utils import timezone
+from django.views.decorators.http import require_GET
 
-def alterar_medicamento(request, pk):
-    """Busca o medicamento pelo ID (pk) e altera seus dados no banco."""
-    # 1. Busca o medicamento atual no banco de dados
-    medicamento = get_object_or_404(Medicamento, pk=pk)
-    
+from .forms import FiltroForm, MedicamentoForm, RegistroUsoForm
+from .models import HorarioMedicamento, Medicamento, RegistroUso
+from .traducao import (
+    NAO_INFORMADO,
+    traduzir_nome_para_ingles,
+    traduzir_texto_para_portugues,
+)
+
+
+def index(request):
+    total = Medicamento.objects.count()
+    altos = Medicamento.objects.filter(importancia="alto").count()
+    hoje = timezone.now().date()
+    tomados_hoje = RegistroUso.objects.filter(data=hoje, tomado=True).count()
+
+    context = {
+        "total_medicamentos": total,
+        "total_altos": altos,
+        "tomados_hoje": tomados_hoje,
+    }
+    return render(request, "medicamento/index.html", context)
+
+
+def listar(request):
+    form = FiltroForm(request.GET or None)
+    medicamentos = Medicamento.objects.prefetch_related("horarios").all()
+
+    if form.is_valid():
+        nome = form.cleaned_data.get("nome")
+        importancia = form.cleaned_data.get("importancia")
+        if nome:
+            medicamentos = medicamentos.filter(nome__icontains=nome)
+        if importancia:
+            medicamentos = medicamentos.filter(importancia=importancia)
+
+    return render(request, "medicamento/listar.html", {
+        "medicamentos": medicamentos,
+        "form": form,
+    })
+
+
+def cadastrar(request):
     if request.method == "POST":
-        # 2. Pega os dados novos que o usuário digitou no formulário HTML
-        novo_nome = request.POST.get("nome")
-        nova_dose = request.POST.get("dose")
-        nova_importancia = request.POST.get("importancia")
-        
-        # Validação simples
-        if not novo_nome or not nova_dose:
-            messages.error(request, "Nome e Dose são obrigatórios!")
-            return redirect('alterar_medicamento', pk=pk)
-            
-        # 3. ATUALIZAÇÃO NO BANCO DE DADOS: Altera as propriedades do objeto
-        medicamento.nome = novo_nome
-        medicamento.dose = nova_dose
-        medicamento.importancia = nova_importancia
-        
-        # 4. Salva de fato no arquivo db.sqlite3
-        medicamento.save()
-        
-        messages.success(request, "Medicamento alterado com sucesso!")
-        return redirect('lista_medicamentos') # Redireciona de volta para a tabela
-        
-    return render(request, 'medicamento/alterar_medicamento.html', {'medicamento': medicamento})
+        form = MedicamentoForm(request.POST)
+        if form.is_valid():
+            med = form.save()
+            horarios = form.cleaned_data["horarios_texto"
