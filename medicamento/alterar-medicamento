@@ -1,0 +1,64 @@
+# Adicione esta função ao seu arquivo existente (onde já tem as traduções)
+
+def alterar_medicamento(medicamento_id, novos_dados, banco_dados_mock=None):
+    """Realiza a alteração de um medicamento no sistema.
+    
+    1. Traduz o novo nome para o termo aceito pela openFDA.
+    2. Simula a busca da nova bula (ou integração com a API).
+    3. Traduz os dados necessários de volta para o português.
+    4. Atualiza o registro no banco de dados.
+    """
+    nome_pt = novos_dados.get("nome")
+    
+    if not nome_pt:
+        return {"sucesso": False, "erro": "O nome do medicamento é obrigatório."}
+        
+    # Executa o fluxo de tradução que você criou
+    nome_en = traduzir_nome_para_ingles(nome_pt)
+    
+    # Aqui simula-se a busca na openFDA usando o nome em inglês (nome_en)
+    # E o retorno da bula em inglês é traduzido de volta:
+    bula_ingles_exemplo = "Indications: Used for pain relief and fever reduction." 
+    bula_portugues = traduzir_texto_para_portugues(bula_ingles_exemplo)
+    
+    # Monta o objeto final atualizado para salvar no banco
+    medicamento_atualizado = {
+        "id": medicamento_id,
+        "nome_portugues": nome_pt,
+        "nome_ingles_openfda": nome_en,
+        "dose": novos_dados.get("dose", NAO_INFORMADO),
+        "importancia": novos_dados.get("importancia", "Média"),
+        "horarios": novos_dados.get("horarios", []),
+        "bula_traduzida": bula_portugues
+    }
+    
+    # Se você estiver usando um banco real (como Supabase), a lógica de salvar entra aqui.
+    # Exemplo mockado (apenas para testes locais):
+    if banco_dados_mock is not None:
+        banco_dados_mock[medicamento_id] = medicamento_atualizado
+        
+    return {"sucesso": True, "dados": medicamento_atualizado}
+
+
+# ==========================================
+# EXEMPLO DE USO PRÁTICO:
+# ==========================================
+if __name__ == "__main__":
+    # Simulando um banco de dados temporário com um remédio antigo cadastrado
+    banco_fake = {
+        1: {"id": 1, "nome_portugues": "Aspirina", "dose": "100mg"}
+    }
+    
+    # Novos dados que o usuário digitou na tela para alterar o remédio ID 1
+    dados_da_tela = {
+        "nome": "Paracetamol",  # Usuário trocou Aspirina por Paracetamol
+        "dose": "500mg",
+        "importancia": "Alta",
+        "horarios": ["08:00", "20:00"]
+    }
+    
+    # Executa a alteração
+    resultado = alterar_medicamento(medicamento_id=1, novos_dados=dados_da_tela, banco_dados_mock=banco_fake)
+    
+    print("Resultado da alteração:")
+    print(json.dumps(resultado, indent=2, ensure_ascii=False))
