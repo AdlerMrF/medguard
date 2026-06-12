@@ -165,4 +165,8 @@ def alterar(request, pk):
 
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
-    return render(request, "medicamento/historico.html",
+    return render(request, "medicamento/historico.html", {"registros": registros})
+
+
+def historico_clinico(request):
+    return render(request, "medicamento/historico_clinico.html")
