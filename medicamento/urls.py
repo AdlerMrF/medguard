@@ -11,6 +11,10 @@ urlpatterns = [
     path("medicamentos/<int:pk>/", views.detalhe, name="detalhe"),
     path("medicamentos/<int:pk>/remover/", views.remover, name="remover"),
     path("alertas/", views.alertas, name="alertas"),
-    path("alertas/<int:pk>/confirmar/", views.confirmar_uso, name="confirmar_uso"),
-    path("bula/<str:nome_medicamento>/", views.buscar_bula_medicamento, name="buscar_bula"),
+    path("medicamentos/<int:pk>/confirmar/", views.confirmar_uso, name="confirmar_uso"),
+    path("medicamentos/bula/<str:nome_medicamento>/", views.buscar_bula_medicamento, name="buscar_bula"),
+    path("medicamentos/<int:pk>/alterar/", views.alterar, name="alterar"),
+
+    # Rota do histórico de visualização do médico
+    path("medicamentos/historico/", views.historico_uso, name="historico_uso"),
 ]
