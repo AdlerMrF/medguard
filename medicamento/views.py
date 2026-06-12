@@ -1,12 +1,14 @@
 from datetime import datetime
+
 import requests
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from .models import HorarioMedicamento, Medicamento, RegistroUso
+
 
 def index(request):
     total = Medicamento.objects.count()
@@ -25,12 +27,12 @@ def listar(request):
     medicamentos = Medicamento.objects.prefetch_related("horarios").all()
     nome = request.GET.get("nome")
     importancia = request.GET.get("importancia")
-    
+
     if nome:
         medicamentos = medicamentos.filter(nome__icontains=nome)
     if importancia:
         medicamentos = medicamentos.filter(importancia=importancia)
-        
+
     return render(request, "medicamento/listar.html", {
         "medicamentos": medicamentos,
         "filtros": {"nome": nome or "", "importancia": importancia or ""},
@@ -43,7 +45,7 @@ def cadastrar(request):
         dose = request.POST.get("dose")
         importancia = request.POST.get("importancia", "medio")
         horarios_raw = request.POST.getlist("horarios") or request.POST.get("horarios", "").split(",")
-        
+
         if nome and dose:
             med = Medicamento.objects.create(nome=nome, dose=dose, importancia=importancia)
             for h in horarios_raw:
