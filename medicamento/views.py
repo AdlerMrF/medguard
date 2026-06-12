@@ -74,6 +74,8 @@ def remover(request, pk):
         messages.success(request, f"Medicamento '{name}' excluído com sucesso.")
         return redirect("medicamento:listar")
     return render(request, "medicamento/confirmar_exclusao.html", {"med": med})
+
+
 def alertas(request):
     agora = timezone.localtime(timezone.now()).time()
     dt_agora = datetime.combine(datetime.today(), agora)
@@ -88,6 +90,8 @@ def alertas(request):
         "alertas": medicamentos_alerta,
         "agora": agora.strftime("%H:%M"),
     })
+
+
 def confirmar_uso(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     if request.method == "POST":
@@ -102,6 +106,8 @@ def confirmar_uso(request, pk):
         messages.info(request, f"{med.nome} registrado como {status}.")
         return redirect("medicamento:alertas")
     return render(request, "medicamento/confirmar_uso.html", {"med": med})
+
+
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):
     url = "https://api.fda.gov/drug/label.json"
@@ -122,6 +128,8 @@ def buscar_bula_medicamento(request, nome_medicamento):
         return JsonResponse({"erro": "Medicamento não encontrado na API"}, status=404)
     except Exception as e:
         return JsonResponse({"erro": str(e)}, status=500)
+
+
 def alterar(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     if request.method == "POST":
@@ -132,6 +140,8 @@ def alterar(request, pk):
         messages.success(request, f"Medicamento '{med.nome}' alterado com sucesso!")
         return redirect("medicamento:listar")
     return redirect("medicamento:listar")
+
+
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
     return render(request, "medicamento/historico.html", {"registros": registros})
