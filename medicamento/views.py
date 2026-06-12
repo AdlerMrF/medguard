@@ -39,26 +39,34 @@ def listar(request):
         "filtros": {"nome": nome or "", "importancia": importancia or ""},
     })
 
+from .forms import MedicamentoForm  # <-- Garanta que importou o seu Form no topo do arquivo!
 
 def cadastrar(request):
     if request.method == "POST":
-        nome = request.POST.get("nome")
-        dose = request.POST.get("dose")
-        importancia = request.POST.get("importancia", "medio")
-        horarios_raw = request.POST.getlist("horarios") or request.POST.get("horarios", "").split(",")
-
-        if nome and dose:
-            med = Medicamento.objects.create(nome=nome, dose=dose, importancia=importancia)
-            for h in horarios_raw:
-                h = h.strip()
-                if h:
-                    HorarioMedicamento.objects.create(medicamento=med, horario=h)
+        form = MedicamentoForm(request.POST)
+        if form.is_valid():
+            # Salva o medicamento principal (nome, dose, importancia, observacoes)
+            med = form.save()
+            
+            # Pega o texto dos horários, separa por vírgula e salva no banco
+            horarios_raw = form.cleaned_data.get("horarios_texto", "")
+            if horarios_raw:
+                # Trata se vier como string separada por vírgulas
+                lista_horarios = horarios_raw.split(",") if isinstance(horarios_raw, str) else horarios_raw
+                for h in lista_horarios:
+                    h = h.strip()
+                    if h:
+                        HorarioMedicamento.objects.create(medicamento=med, horario=h)
+            
             messages.success(request, f"Medicamento '{med.nome}' cadastrado com sucesso!")
             return redirect("medicamento:listar")
-    return render(request, "medicamento/cadastrar.html")
+    else:
+        form = MedicamentoForm()
+        
+    return render(request, "medicamento/cadastrar.html", {"form": form})
 
 
-def detalle(request, pk):
+def detalhe(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     registros = med.registros.order_by("-data")[:10]
     return render(request, "medicamento/detalhe.html", {
@@ -132,24 +140,20 @@ def buscar_bula_medicamento(request, nome_medicamento):
     except Exception as e:
         return JsonResponse({"erro": str(e)}, status=500)
 
-
 def alterar(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     if request.method == "POST":
         med.nome = request.POST.get("nome", med.nome)
         med.dose = request.POST.get("dose", med.dose)
-        med.importancia = request.POST.get("importancia", med.importancia)
+        med.importancia = request.POST.get("importancia", med.importancia)  # <-- Parêntese fechado aqui!
         med.save()
         messages.success(request, f"Medicamento '{med.nome}' alterado com sucesso!")
         return redirect("medicamento:listar")
     return redirect("medicamento:listar")
-
-
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
     return render(request, "medicamento/historico.html", {"registros": registros})
 
 
-# Nova view para renderizar a página do Prontuário / Histórico Clínico
 def historico_clinico(request):
     return render(request, "medicamento/historico_clinico.html")
