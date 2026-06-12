@@ -30,4 +30,12 @@
   <a href="{% url 'medicamento:listar' %}"    class="btn btn-secondary">📋 Ver Todos</a>
   <a href="{% url 'medicamento:alertas' %}"   class="btn btn-warning">⏰ Verificar Alertas</a>
 </div>
+
+<div class="card" style="margin-top: 1.5rem; background: #ebf8ff; border: 1px solid #bee3f8; text-align: center; padding: 2rem; border-radius: 12px;">
+    <h3 style="color: #2b6cb0; margin-bottom: 0.5rem;">🩺 Acesso Profissional (Espaço do Médico)</h3>
+    <p style="color: #4a5568; margin-bottom: 1.5rem;">Acesse o painel clínico para auditar de forma cronológica todos os registros e checagens de consumo do paciente.</p>
+    <a href="/medicamentos/historico/" class="btn btn-primary" style="background: linear-gradient(135deg, #2b6cb0, #2c5282); font-size: 1rem; padding: 0.75rem 2rem; text-decoration: none; color: white; display: inline-block; border-radius: 8px; font-weight: 600;">
+        Abrir Prontuário Clínico ➡️
+    </a>
+</div>
 {% endblock %}
