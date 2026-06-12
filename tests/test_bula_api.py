@@ -12,9 +12,7 @@ class TestBulaAPIView:
     def setup_method(self):
         self.client = Client()
 
-    # A traducao do texto da bula é isolada (identidade) para o teste não
-    # depender de rede; a logica de traducao tem testes próprios.
-    @patch("medicamento.views.traduzir_texto_para_portugues", side_effect=lambda t: t)
+    @patch("medicamento.traducao.traduzir_texto_para_portugues", side_effect=lambda t: t)
     @patch("medicamento.views.requests.get")
     def test_buscar_bula_sucesso(self, mock_get, _mock_traduz):
         mock_response = MagicMock()
@@ -37,13 +35,12 @@ class TestBulaAPIView:
         assert response.status_code == 200
         data = json.loads(response.content)
         assert data["nome"] == "paracetamol"
-        # O nome PT foi convertido para o termo em inglês usado na consulta.
         assert data["nome_consultado"] == "acetaminophen"
         assert data["para_qual_finalidade"] == "Pain and fever relief"
         assert data["avisos"] == "Do not use with alcohol"
         assert data["efeitos_adversos"] == "Nausea, dizziness"
 
-        # A openFDA foi consultada com o termo traduzido, não com o português.
+        # Como a View agora usa argumentos 100% nomeados, o kwargs isola o dicionário perfeitamente
         _, kwargs = mock_get.call_args
         assert "acetaminophen" in kwargs["params"]["search"]
 

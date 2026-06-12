@@ -8,8 +8,9 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 from requests.exceptions import Timeout
 
+from .forms import MedicamentoForm
 from .models import HorarioMedicamento, Medicamento, RegistroUso
-from .traducao import traduzir_texto as traduzir_texto_para_portugues
+from .traducao import traduzir_nome_para_ingles, traduzir_texto_para_portugues
 
 
 def index(request):
@@ -43,20 +44,23 @@ def listar(request):
 
 def cadastrar(request):
     if request.method == "POST":
-        nome = request.POST.get("nome")
-        dose = request.POST.get("dose")
-        importancia = request.POST.get("importancia", "medio")
-        horarios_raw = request.POST.getlist("horarios") or request.POST.get("horarios", "").split(",")
+        form = MedicamentoForm(request.POST)
+        if form.is_valid():
+            med = form.save()
+            horarios_raw = form.cleaned_data.get("horarios_texto", "")
+            if horarios_raw:
+                lista_horarios = horarios_raw.split(",") if isinstance(horarios_raw, str) else horarios_raw
+                for h in lista_horarios:
+                    h = h.strip()
+                    if h:
+                        HorarioMedicamento.objects.create(medicamento=med, horario=h)
 
-        if nome and dose:
-            med = Medicamento.objects.create(nome=nome, dose=dose, importancia=importancia)
-            for h in horarios_raw:
-                h = h.strip()
-                if h:
-                    HorarioMedicamento.objects.create(medicamento=med, horario=h)
             messages.success(request, f"Medicamento '{med.nome}' cadastrado com sucesso!")
             return redirect("medicamento:listar")
-    return render(request, "medicamento/cadastrar.html")
+    else:
+        form = MedicamentoForm()
+
+    return render(request, "medicamento/cadastrar.html", {"form": form})
 
 
 def detalhe(request, pk):
@@ -88,6 +92,7 @@ def alertas(request):
             if abs((dt_agora - dt_h).total_seconds()) <= 600:
                 medicamentos_alerta.append(med)
                 break
+
     return render(request, "medicamento/alertas.html", {
         "alertas": medicamentos_alerta,
         "agora": agora.strftime("%H:%M"),
@@ -112,20 +117,33 @@ def confirmar_uso(request, pk):
 
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):
+    nome_en = traduzir_nome_para_ingles(nome_medicamento)
+
     url = "https://api.fda.gov/drug/label.json"
-    params = {"search": f'openfda.generic_name:"{nome_medicamento}" OR openfda.brand_name:"{nome_medicamento}"', "limit": 1}
+    params = {
+        "search": f'openfda.generic_name:"{nome_en}" OR openfda.brand_name:"{nome_en}"',
+        "limit": 1
+    }
     try:
-        response = requests.get(url, params=params, timeout=5)
+        # Passando url e params explicitamente como argumentos nomeados para o mock do pytest
+        response = requests.get(url=url, params=params, timeout=5)
+
         if response.status_code == 200:
             data = response.json()
             results = data.get("results", [])
             if results:
                 bula = results[0]
+
+                finalidade_en = bula.get("purpose", ["Não informado"])[0]
+                avisos_en = bula.get("warnings", ["Não informado"])[0]
+                efeitos_en = bula.get("adverse_reactions", ["Não informado"])[0]
+
                 return JsonResponse({
                     "nome": nome_medicamento,
-                    "para_qual_finalidade": bula.get("purpose", ["Não informado"])[0],
-                    "avisos": bula.get("warnings", ["Não informado"])[0],
-                    "efeitos_adversos": bula.get("adverse_reactions", ["Não informado"])[0],
+                    "nome_consultado": nome_en,
+                    "para_qual_finalidade": traduzir_texto_para_portugues(finalidade_en),
+                    "avisos": traduzir_texto_para_portugues(avisos_en),
+                    "efeitos_adversos": traduzir_texto_para_portugues(efeitos_en),
                 })
         return JsonResponse({"erro": "Medicamento não encontrado na API"}, status=404)
     except Timeout:
@@ -149,3 +167,7 @@ def alterar(request, pk):
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
     return render(request, "medicamento/historico.html", {"registros": registros})
+
+
+def historico_clinico(request):
+    return render(request, "medicamento/historico_clinico.html")
