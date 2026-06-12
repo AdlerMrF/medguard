@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import requests
 from django.contrib import messages
 from django.http import JsonResponse
@@ -9,7 +8,6 @@ from django.views.decorators.http import require_GET
 from requests.exceptions import Timeout
 
 from .models import HorarioMedicamento, Medicamento, RegistroUso
-# Altere na linha 12 do views.py
 from .traducao import traduzir_texto_para_portugues
 
 
@@ -60,7 +58,7 @@ def cadastrar(request):
     return render(request, "medicamento/cadastrar.html")
 
 
-def detalhe(request, pk):
+def detalle(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     registros = med.registros.order_by("-data")[:10]
     return render(request, "medicamento/detalhe.html", {
@@ -123,7 +121,7 @@ def buscar_bula_medicamento(request, nome_medicamento):
             if results:
                 bula = results[0]
                 return JsonResponse({
-                    "nome": nome_medicamento,
+                    "name": nome_medicamento,
                     "para_qual_finalidade": bula.get("purpose", ["Não informado"])[0],
                     "avisos": bula.get("warnings", ["Não informado"])[0],
                     "efeitos_adversos": bula.get("adverse_reactions", ["Não informado"])[0],
@@ -150,3 +148,8 @@ def alterar(request, pk):
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
     return render(request, "medicamento/historico.html", {"registros": registros})
+
+
+# Nova view para renderizar a página do Prontuário / Histórico Clínico
+def historico_clinico(request):
+    return render(request, "medicamento/historico_clinico.html")

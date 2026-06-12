@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 app_name = "medicamento"
@@ -14,7 +13,8 @@ urlpatterns = [
     path("medicamentos/<int:pk>/confirmar/", views.confirmar_uso, name="confirmar_uso"),
     path("medicamentos/bula/<str:nome_medicamento>/", views.buscar_bula_medicamento, name="buscar_bula"),
     path("medicamentos/<int:pk>/alterar/", views.alterar, name="alterar"),
-
-    # Rota do histórico de visualização do médico
     path("medicamentos/historico/", views.historico_uso, name="historico_uso"),
+    
+    # Nova rota para o Prontuário / Histórico Clínico
+    path("historico-clinico/", views.historico_clinico, name="historico_clinico"),
 ]
