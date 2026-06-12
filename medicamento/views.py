@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import requests
 from django.contrib import messages
 from django.http import JsonResponse
@@ -91,7 +92,7 @@ def alertas(request):
             if abs((dt_agora - dt_h).total_seconds()) <= 600:
                 medicamentos_alerta.append(med)
                 break
-                
+
     return render(request, "medicamento/alertas.html", {
         "alertas": medicamentos_alerta,
         "agora": agora.strftime("%H:%M"),
@@ -130,11 +131,11 @@ def buscar_bula_medicamento(request, nome_medicamento):
             results = data.get("results", [])
             if results:
                 bula = results[0]
-                
+
                 finalidade_en = bula.get("purpose", ["Não informado"])[0]
                 avisos_en = bula.get("warnings", ["Não informado"])[0]
                 efeitos_en = bula.get("adverse_reactions", ["Não informado"])[0]
-                
+
                 return JsonResponse({
                     "nome": nome_medicamento,
                     "nome_consultado": nome_en,
