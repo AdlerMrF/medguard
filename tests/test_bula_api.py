@@ -12,7 +12,6 @@ class TestBulaAPIView:
     def setup_method(self):
         self.client = Client()
 
-    # Ajustado o patch para apontar para a origem real da função de tradução
     @patch("medicamento.traducao.traduzir_texto_para_portugues", side_effect=lambda t: t)
     @patch("medicamento.views.requests.get")
     def test_buscar_bula_sucesso(self, mock_get, _mock_traduz):
@@ -41,6 +40,7 @@ class TestBulaAPIView:
         assert data["avisos"] == "Do not use with alcohol"
         assert data["efeitos_adversos"] == "Nausea, dizziness"
 
+        # Como a View agora usa argumentos 100% nomeados, o kwargs isola o dicionário perfeitamente
         _, kwargs = mock_get.call_args
         assert "acetaminophen" in kwargs["params"]["search"]
 
