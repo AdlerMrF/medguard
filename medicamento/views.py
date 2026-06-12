@@ -105,7 +105,7 @@ def confirmar_uso(request, pk):
             tomado=tomado_status
         )
         status = "tomado" if tomado_status else "não tomado"
-        messages.info(request, f"{med.nome} registrado como {status}.")
+        messages.info(request, f"{med.nome} registrado as {status}.")
         return redirect("medicamento:alertas")
     return render(request, "medicamento/confirmar_uso.html", {"med": med})
 
@@ -113,4 +113,39 @@ def confirmar_uso(request, pk):
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):
     url = "https://api.fda.gov/drug/label.json"
-    params = {"search": f'openfda.generic_name:"{nome_medicamento}" OR openfda.brand_name:"{nome_medicamento}"',
+    params = {"search": f'openfda.generic_name:"{nome_medicamento}" OR openfda.brand_name:"{nome_medicamento}"', "limit": 1}
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get("results", [])
+            if results:
+                bula = results[0]
+                return JsonResponse({
+                    "nome": nome_medicamento,
+                    "para_qual_finalidade": bula.get("purpose", ["Não informado"])[0],
+                    "avisos": bula.get("warnings", ["Não informado"])[0],
+                    "efeitos_adversos": bula.get("adverse_reactions", ["Não informado"])[0],
+                })
+        return JsonResponse({"erro": "Medicamento não encontrado na API"}, status=404)
+    except Timeout:
+        return JsonResponse({"erro": "Tempo de requisição esgotado (Timeout)"}, status=504)
+    except Exception as e:
+        return JsonResponse({"erro": str(e)}, status=500)
+
+
+def alterar(request, pk):
+    med = get_object_or_404(Medicamento, pk=pk)
+    if request.method == "POST":
+        med.nome = request.POST.get("nome", med.nome)
+        med.dose = request.POST.get("dose", med.dose)
+        med.importancia = request.POST.get("importancia", med.importancia)
+        med.save()
+        messages.success(request, f"Medicamento '{med.nome}' alterado com sucesso!")
+        return redirect("medicamento:listar")
+    return redirect("medicamento:listar")
+
+
+def historico_uso(request):
+    registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
+    return render(request, "medicamento/historico.html", {"registros": registros})
