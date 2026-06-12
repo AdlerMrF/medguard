@@ -9,7 +9,9 @@ from django.views.decorators.http import require_GET
 from requests.exceptions import Timeout
 
 from .models import HorarioMedicamento, Medicamento, RegistroUso
-from .traducao import traduzir_texto as traduzir_texto_para_portugues
+def traduzir_texto(texto):
+    # seu código aqui
+    pass
 
 
 def index(request):
