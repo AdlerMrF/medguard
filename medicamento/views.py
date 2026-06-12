@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import requests
 from django.contrib import messages
 from django.http import JsonResponse
@@ -7,8 +8,8 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 from requests.exceptions import Timeout
 
+from .forms import MedicamentoForm
 from .models import HorarioMedicamento, Medicamento, RegistroUso
-from .traducao import traduzir_texto_para_portugues
 
 
 def index(request):
@@ -39,30 +40,25 @@ def listar(request):
         "filtros": {"nome": nome or "", "importancia": importancia or ""},
     })
 
-from .forms import MedicamentoForm  # <-- Garanta que importou o seu Form no topo do arquivo!
 
 def cadastrar(request):
     if request.method == "POST":
         form = MedicamentoForm(request.POST)
         if form.is_valid():
-            # Salva o medicamento principal (nome, dose, importancia, observacoes)
             med = form.save()
-            
-            # Pega o texto dos horários, separa por vírgula e salva no banco
             horarios_raw = form.cleaned_data.get("horarios_texto", "")
             if horarios_raw:
-                # Trata se vier como string separada por vírgulas
                 lista_horarios = horarios_raw.split(",") if isinstance(horarios_raw, str) else horarios_raw
                 for h in lista_horarios:
                     h = h.strip()
                     if h:
                         HorarioMedicamento.objects.create(medicamento=med, horario=h)
-            
+
             messages.success(request, f"Medicamento '{med.nome}' cadastrado com sucesso!")
             return redirect("medicamento:listar")
     else:
         form = MedicamentoForm()
-        
+
     return render(request, "medicamento/cadastrar.html", {"form": form})
 
 
@@ -140,16 +136,19 @@ def buscar_bula_medicamento(request, nome_medicamento):
     except Exception as e:
         return JsonResponse({"erro": str(e)}, status=500)
 
+
 def alterar(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     if request.method == "POST":
         med.nome = request.POST.get("nome", med.nome)
         med.dose = request.POST.get("dose", med.dose)
-        med.importancia = request.POST.get("importancia", med.importancia)  # <-- Parêntese fechado aqui!
+        med.importancia = request.POST.get("importancia", med.importancia)
         med.save()
         messages.success(request, f"Medicamento '{med.nome}' alterado com sucesso!")
         return redirect("medicamento:listar")
     return redirect("medicamento:listar")
+
+
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
     return render(request, "medicamento/historico.html", {"registros": registros})
