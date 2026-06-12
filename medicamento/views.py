@@ -125,7 +125,6 @@ def buscar_bula_medicamento(request, nome_medicamento):
         "limit": 1
     }
     try:
-        # Passando url e params explicitamente como argumentos nomeados para o mock do pytest
         response = requests.get(url=url, params=params, timeout=5)
 
         if response.status_code == 200:
@@ -166,8 +165,4 @@ def alterar(request, pk):
 
 def historico_uso(request):
     registros = RegistroUso.objects.select_related("medicamento").order_by("-data", "-horario")
-    return render(request, "medicamento/historico.html", {"registros": registros})
-
-
-def historico_clinico(request):
-    return render(request, "medicamento/historico_clinico.html")
+    return render(request, "medicamento/historico.html",
