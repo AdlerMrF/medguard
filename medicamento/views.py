@@ -127,17 +127,17 @@ def buscar_bula_medicamento(request, nome_medicamento):
     try:
         # Passando url e params explicitamente como argumentos nomeados para o mock do pytest
         response = requests.get(url=url, params=params, timeout=5)
-        
+
         if response.status_code == 200:
             data = response.json()
             results = data.get("results", [])
             if results:
                 bula = results[0]
-                
+
                 finalidade_en = bula.get("purpose", ["Não informado"])[0]
                 avisos_en = bula.get("warnings", ["Não informado"])[0]
                 efeitos_en = bula.get("adverse_reactions", ["Não informado"])[0]
-                
+
                 return JsonResponse({
                     "nome": nome_medicamento,
                     "nome_consultado": nome_en,
