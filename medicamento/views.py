@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_GET
 
-from .forms import FiltroForm, MedicamentoForm, RegistroUsoForm
-from .models import HorarioMedicamento, Medicamento, RegistroUso
+from .forms import FiltroForm, FiltroHistoricoForm, MedicamentoForm, RegistroUsoForm
+from .models import HistoricoEvento, HorarioMedicamento, Medicamento, RegistroUso
 from .traducao import (
     NAO_INFORMADO,
     traduzir_nome_para_ingles,
@@ -81,6 +81,14 @@ def remover(request, pk):
     med = get_object_or_404(Medicamento, pk=pk)
     if request.method == "POST":
         nome = med.nome
+        HistoricoEvento.objects.create(
+            tipo="excluido",
+            nome_medicamento=med.nome,
+            dose=med.dose,
+            importancia=med.importancia,
+            observacoes=med.observacoes,
+            horario=timezone.localtime(timezone.now()).time(),
+        )
         med.delete()
         messages.success(request, f"Medicamento '{nome}' excluído com sucesso.")
         return redirect("medicamento:listar")
@@ -114,6 +122,15 @@ def confirmar_uso(request, pk):
             registro.medicamento = med
             registro.horario = timezone.localtime(timezone.now()).time()
             registro.save()
+            HistoricoEvento.objects.create(
+                tipo="tomado" if registro.tomado else "nao_tomado",
+                nome_medicamento=med.nome,
+                dose=med.dose,
+                importancia=med.importancia,
+                observacoes=med.observacoes,
+                observacao_registro=registro.observacao,
+                horario=registro.horario,
+            )
             status = "tomado" if registro.tomado else "não tomado"
             messages.info(request, f"{med.nome} registrado como {status}.")
             return redirect("medicamento:alertas")
@@ -121,6 +138,30 @@ def confirmar_uso(request, pk):
         form = RegistroUsoForm()
 
     return render(request, "medicamento/confirmar_uso.html", {"med": med, "form": form})
+
+def historico(request):
+    form = FiltroHistoricoForm(request.GET or None)
+    eventos = HistoricoEvento.objects.all()
+
+    if form.is_valid():
+        nome = form.cleaned_data.get("nome")
+        importancia = form.cleaned_data.get("importancia")
+        data_inicio = form.cleaned_data.get("data_inicio")
+        data_fim = form.cleaned_data.get("data_fim")
+        if nome:
+            eventos = eventos.filter(nome_medicamento__icontains=nome)
+        if importancia:
+            eventos = eventos.filter(importancia=importancia)
+        if data_inicio:
+            eventos = eventos.filter(data__gte=data_inicio)
+        if data_fim:
+            eventos = eventos.filter(data__lte=data_fim)
+
+    return render(request, "medicamento/historico.html", {
+        "eventos": eventos,
+        "form": form,
+    })
+
 
 @require_GET
 def buscar_bula_medicamento(request, nome_medicamento):

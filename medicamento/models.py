@@ -54,6 +54,41 @@ class HorarioMedicamento(models.Model):
         return f"{self.medicamento.nome} às {self.horario.strftime('%H:%M')}"
 
 
+class HistoricoEvento(models.Model):
+    """Snapshot de eventos do medicamento: sobrevive à exclusão do registro original."""
+
+    TIPO_EVENTO = [
+        ("tomado", "Tomado"),
+        ("nao_tomado", "Não tomado"),
+        ("excluido", "Excluído"),
+    ]
+
+    tipo = models.CharField(
+        max_length=12,
+        choices=TIPO_EVENTO,
+        verbose_name="Tipo de Evento",
+    )
+    nome_medicamento = models.CharField(max_length=200, verbose_name="Nome do Medicamento")
+    dose = models.CharField(max_length=200, verbose_name="Dose")
+    importancia = models.CharField(
+        max_length=10,
+        choices=IMPORTANCIA,
+        verbose_name="Nível de Importância",
+    )
+    observacoes = models.TextField(blank=True, default="", verbose_name="Observações do Medicamento")
+    observacao_registro = models.TextField(blank=True, default="", verbose_name="Observação do Registro")
+    data = models.DateField(auto_now_add=True, verbose_name="Data")
+    horario = models.TimeField(verbose_name="Horário")
+
+    class Meta:
+        verbose_name = "Evento do Histórico"
+        verbose_name_plural = "Eventos do Histórico"
+        ordering = ["-data", "-horario"]
+
+    def __str__(self):
+        return f"[{self.get_tipo_display()}] {self.nome_medicamento} - {self.data}"
+
+
 class RegistroUso(models.Model):
     medicamento = models.ForeignKey(
         Medicamento,
