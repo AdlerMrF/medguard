@@ -73,6 +73,37 @@ class FiltroForm(forms.Form):
     )
 
 
+class FiltroHistoricoForm(forms.Form):
+    nome = forms.CharField(
+        required=False,
+        label="Buscar por nome",
+        widget=forms.TextInput(attrs={"placeholder": "Digite o nome..."}),
+    )
+
+    importancia = forms.ChoiceField(
+        required=False,
+        label="Importância",
+        choices=[
+            ("", "Todas"),
+            ("baixo", "Baixo"),
+            ("medio", "Médio"),
+            ("alto", "Alto"),
+        ],
+    )
+
+    data_inicio = forms.DateField(
+        required=False,
+        label="De",
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+
+    data_fim = forms.DateField(
+        required=False,
+        label="Até",
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+
+
 class RegistroUsoForm(forms.ModelForm):
     class Meta:
         model = RegistroUso

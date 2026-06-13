@@ -1,0 +1,68 @@
+{% extends "medicamento/base.html" %}
+{% block title %}Histórico{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem">
+    <h2>📜 Histórico de Medicações</h2>
+  </div>
+
+  <form method="get" style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem">
+    <div style="flex:2; min-width:200px">
+      {{ form.nome.label_tag }}
+      {{ form.nome }}
+    </div>
+    <div style="flex:1; min-width:140px">
+      {{ form.importancia.label_tag }}
+      {{ form.importancia }}
+    </div>
+    <div style="flex:1; min-width:150px">
+      {{ form.data_inicio.label_tag }}
+      {{ form.data_inicio }}
+    </div>
+    <div style="flex:1; min-width:150px">
+      {{ form.data_fim.label_tag }}
+      {{ form.data_fim }}
+    </div>
+    <div style="display:flex; align-items:flex-end; gap:0.5rem">
+      <button type="submit" class="btn btn-primary">🔍 Filtrar</button>
+      <a href="{% url 'medicamento:historico' %}" class="btn btn-secondary">Limpar</a>
+    </div>
+  </form>
+
+  {% if eventos %}
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th><th>Horário</th><th>Medicamento</th><th>Dose</th><th>Importância</th><th>Status</th><th>Observação</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ev in eventos %}
+        <tr>
+          <td>{{ ev.data|date:"d/m/Y" }}</td>
+          <td>{{ ev.horario|time:"H:i" }}</td>
+          <td><strong>{{ ev.nome_medicamento }}</strong></td>
+          <td>{{ ev.dose }}</td>
+          <td>
+            <span class="badge badge-{{ ev.importancia }}">{{ ev.get_importancia_display }}</span>
+          </td>
+          <td>
+            {% if ev.tipo == "tomado" %}
+              <span class="badge" style="background:#c6f6d5; color:#276749">✅ Tomado</span>
+            {% elif ev.tipo == "nao_tomado" %}
+              <span class="badge" style="background:#fefcbf; color:#b7791f">⚠️ Não tomado</span>
+            {% else %}
+              <span class="badge" style="background:#fed7d7; color:#c53030">🗑 Excluído</span>
+            {% endif %}
+          </td>
+          <td>{{ ev.observacao_registro|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p style="color:#718096; text-align:center; padding:2rem">⚠️ Nenhum registro encontrado no histórico.</p>
+  {% endif %}
+</div>
+{% endblock %}
